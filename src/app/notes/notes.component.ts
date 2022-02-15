@@ -13,6 +13,7 @@ export class NotesComponent implements OnInit {
 
   notes: Note[] = NOTES
   currentNote?: Note
+  checked = false
 
   form = this.fb.group({
     text: [''],
@@ -20,30 +21,39 @@ export class NotesComponent implements OnInit {
   })
 
   constructor(private fb: FormBuilder, private httpClient: HttpClientService) {
-    httpClient.getRecords().subscribe(data => {
-      this.notes = data
-    })
+    this.loadNotes()
   }
 
-
   ngOnInit(): void {
+  }
+
+  loadNotes() {
+    this.httpClient.getRecords(this.checked).subscribe(data => {
+      this.notes = data
+    })
   }
 
   removeNote(id: number | undefined) {
 
     if (id) {
-      this.httpClient.deleteRecord(id)
+      this.httpClient.deleteRecord(id).subscribe()
       this.notes.forEach((n, i) => {
         if (n.id === id) this.notes.slice(i, 1)
       });
     }
+
+    this.loadNotes()
   }
 
   add() {
-    this.notes.push({
+    
+    this.httpClient.addRecord({
       text: this.form.get('text')?.value,
       deadline: new Date(this.form.get('deadline')?.value),
       checked: false
+    }).subscribe(data => {
+      this.notes.push()
+      this.loadNotes()
     })
   }
 
@@ -55,5 +65,11 @@ export class NotesComponent implements OnInit {
     this.notes.forEach(n => {
       if (n.id == id) n.checked = true
     })
+    //todo
+  }
+
+  toogle() {
+    this.checked = !this.checked
+    this.loadNotes()
   }
 }

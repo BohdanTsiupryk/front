@@ -24,8 +24,8 @@ export class HttpClientService {
     return this.http.post<Token>(this.BASE_URL + this.AUTH_PREF + "/login", req)
   }
 
-  getRecords(): Observable<Note[]> {
-    return this.http.get<Note[]>(this.BASE_URL + this.NOTE_PREF)
+  getRecords(checked: boolean): Observable<Note[]> {
+    return this.http.get<Note[]>(this.BASE_URL + this.NOTE_PREF, {params: {checked}})
   }
 
   addRecord(record: Note): Observable<any> {
