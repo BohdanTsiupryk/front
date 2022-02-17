@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Note} from "../interface";
 import {NOTES} from "../mocks";
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, FormControl} from "@angular/forms";
 import {HttpClientService} from "../http-client.service";
 
 @Component({
@@ -14,6 +14,8 @@ export class NotesComponent implements OnInit {
   notes: Note[] = NOTES
   currentNote?: Note
   checked = false
+
+  modal = new FormControl('')
 
   form = this.fb.group({
     text: [''],
@@ -59,17 +61,35 @@ export class NotesComponent implements OnInit {
 
   details(id: number | undefined) {
     this.currentNote = this.notes.find(n => n.id == id);
+    this.modal.setValue(this.currentNote?.text)
   }
 
-  check(id: number | undefined) {
+  check(id: number | undefined, check: boolean | undefined) {
+
     this.notes.forEach(n => {
-      if (n.id == id) n.checked = true
+      if (n.id == id && check != undefined) {
+        console.log(check)
+        n.checked = !check
+
+        this.httpClient.saveRecord(n).subscribe(
+          d => { this.loadNotes() }
+        )
+      
+      } 
     })
-    //todo
   }
 
   toogle() {
     this.checked = !this.checked
     this.loadNotes()
+  }
+
+  saveEdit() {
+    if (this.currentNote) {
+      this.currentNote.text = this.modal.value
+      this.httpClient.saveRecord(this.currentNote).subscribe(
+        d => this.loadNotes()
+      )
+    }
   }
 }

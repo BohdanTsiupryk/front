@@ -32,6 +32,10 @@ export class HttpClientService {
     return this.http.post(this.BASE_URL + this.NOTE_PREF, record)
   }
 
+  saveRecord(record: Note): Observable<any> {
+    return this.http.post(this.BASE_URL + this.NOTE_PREF + '/' + record.id, record)
+  }
+
   deleteRecord(id: number): Observable<any> {
     return this.http.delete(this.BASE_URL + this.NOTE_PREF + "/" + id)
   }
