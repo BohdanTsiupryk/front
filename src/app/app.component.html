@@ -1,3 +1,16 @@
 <h1>Header</h1>
 <hr>
-<app-notes></app-notes>
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" routerLink="/notes">Notes</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLink="/main">Main</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLink="/auth">Auth</a>
+    </li>
+</ul>
+  <hr>
+
+<router-outlet></router-outlet>

@@ -68,7 +68,6 @@ export class NotesComponent implements OnInit {
 
     this.notes.forEach(n => {
       if (n.id == id && check != undefined) {
-        console.log(check)
         n.checked = !check
 
         this.httpClient.saveRecord(n).subscribe(
